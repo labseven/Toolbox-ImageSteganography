@@ -10,15 +10,26 @@ def decode_image(file_location="images/encoded_sample.png"):
     encoded_image = Image.open(file_location)
     red_channel = encoded_image.split()[0]
 
+    print(red_channel.getpixel((1, 1)))
+    print(lsb_of_pixel(red_channel, 1, 1))
+
     x_size = encoded_image.size[0]
     y_size = encoded_image.size[1]
 
     decoded_image = Image.new("RGB", encoded_image.size)
     pixels = decoded_image.load()
 
-    pass #TODO: Fill in decoding functionality
+    for x in range(x_size):
+        for y in range(y_size):
+            if lsb_of_pixel(red_channel, x, y):
+                pixels[x, y] = (255,255,255)
+            else:
+                pixels[x, y] = (0, 0, 0)
+
+            #pixels[x, y] = [(0,0,0) if lsb_of_pixel(red_channel, x, y) else (1,1,1)]
 
     decoded_image.save("images/decoded_image.png")
+    decoded_image.show()
 
 def write_text(text_to_write, image_size):
     """Writes text to an RGB image. Automatically line wraps
@@ -45,9 +56,13 @@ def encode_image(text_to_encode, template_image="images/samoyed.jpg"):
     """
     pass #TODO: Fill out this function
 
+
+def lsb_of_pixel(image, x, y):
+    return image.getpixel((x, y)) % 2
+
 if __name__ == '__main__':
     print("Decoding the image...")
     decode_image()
 
     print("Encoding the image...")
-    encode_image()
+    encode_image("Hi meme")
