@@ -66,15 +66,26 @@ def encode_image(text_to_encode, template_image="images/samoyed.jpg", output_ima
 
     usr_font = ImageFont.truetype("ComicNeue.otf", 25)
     d_usr = ImageDraw.Draw(text_image)
-    d_usr = d_usr.text((105,280), text_to_encode,(0,0,0), font=usr_font)
-    text_image.show()
+    d_usr = d_usr.text((10,10), text_to_encode, (255,255,255), font=usr_font)
+
+    for x in range(x_size):
+        for y in range(y_size):
+            if lsb_of_red_pixel(text_image, x, y):
+                pixels[x,y] = (image.getpixel((x, y))[0] + 1, image.getpixel((x, y))[1], image.getpixel((x, y))[2])
+
+    image.save(output_image)
+
+
 
 def lsb_of_red_pixel(image, x, y):
     return image.getpixel((x, y))[0] % 2
 
 if __name__ == '__main__':
-    print("Decoding the image...")
-    decode_image()
+    # print("Decoding the image...")
+    # decode_image()
 
     print("Encoding the image...")
     encode_image("Hi meme")
+
+    print("Decoding Encoded image...")
+    decode_image("images/samoyed.secret.png")
